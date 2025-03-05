@@ -38,7 +38,7 @@ app.get("/api/v1/health", (req, res) => {
 });
 
 //using employee and branch routes 
-app.use("/api/v1/routes/employees",loanRoute)
+app.use("/api/v1/loans",loanRoute)
 
 
 //uses the imported error handdler last

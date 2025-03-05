@@ -1,0 +1,9 @@
+### Create branch with valid data
+POST http://localhost:3000/api/v1/loans
+Content-Type: application/json
+
+{
+    "name": "second branch lets see",
+    "address": "so excited",
+    "phone": "204-yipee-2222"
+}
