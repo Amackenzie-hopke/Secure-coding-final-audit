@@ -21,7 +21,7 @@ const authenticate = async (
     next:NextFunction
 ): Promise<void> => {
 try {
-    const token: string |undefined = req.headers.authorization?.split(".")[1];
+    const token: string |undefined = req.headers.authorization?.split(" ")[1];
 
     if (!token){
         return next(new AuthenticationError(
