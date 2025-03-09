@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 
 // Internal module imports
 import { AuthorizationOptions } from "../models/authorizationOptions";
-import { MiddlewareFunction } from "../types/expressTypes";
+import { MiddlewareFunction } from "../types/express";
 import { AuthorizationError } from "../errors/errors";
 
 /**
