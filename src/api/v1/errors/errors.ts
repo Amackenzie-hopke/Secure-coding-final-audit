@@ -58,7 +58,7 @@ export class ServiceError extends AppError {
     constructor(
         message:string,
         code:string = "SERVICE_ERROR",
-        statusCode:number = HTTP_STATUS.INTERNAL_SERVER_ERROR;
+        statusCode:number = HTTP_STATUS.INTERNAL_SERVER_ERROR
     ){
         super(message,code, statusCode);
     }
