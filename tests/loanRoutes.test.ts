@@ -2,17 +2,17 @@ import request from "supertest";
 import { Request, Response, NextFunction } from "express";
 import app from "../src/app";
 import {
-    getAllItems,
-    createItem,
-    updateItem,
-    deleteItem,
-} from "../src/api/v1/controllers/itemController";
+    createLoanRequest,
+    updateLoanReview,
+    getAllLoans,
+    approveUpdateLoan,
+} from "../src/api/v1/controllers/loanControllers";
 
 jest.mock("../src/api/v1/controllers/itemController", () => ({
-    getAllItems: jest.fn((req, res) => res.status(200).send()),
-    createItem: jest.fn((req, res) => res.status(201).send()),
-    updateItem: jest.fn((req, res) => res.status(200).send()),
-    deleteItem: jest.fn((req, res) => res.status(200).send()),
+    createLoanRequest: jest.fn((req, res) => res.status(200).send()),
+    updateLoanReview: jest.fn((req, res) => res.status(201).send()),
+    getAllLoans: jest.fn((req, res) => res.status(200).send()),
+    approveUpdateLoan: jest.fn((req, res) => res.status(200).send()),
 }));
 
 jest.mock("../src/api/v1/middleware/authenticate", () => {
