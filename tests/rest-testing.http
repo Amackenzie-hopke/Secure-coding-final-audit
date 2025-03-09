@@ -1,9 +1,20 @@
-### Create branch with valid data
+### Create new loan request
 POST http://localhost:3000/api/v1/loans
 Content-Type: application/json
 
-{
-    "name": "second branch lets see",
-    "address": "so excited",
-    "phone": "204-yipee-2222"
-}
+{}
+
+### Update loan review (Officer only)
+PUT http://localhost:3000/api/v1/loans/123/review
+Content-Type: application/json
+
+{}
+
+### Get all loans (Officer and Manager only)
+GET http://localhost:3000/api/v1/loans
+
+### Approve/Reject loan (Manager only)
+PUT http://localhost:3000/api/v1/loans/123/approve
+Content-Type: application/json
+
+{}

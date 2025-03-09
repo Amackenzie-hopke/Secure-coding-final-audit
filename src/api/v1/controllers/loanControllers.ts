@@ -2,8 +2,6 @@ import { Request, Response,NextFunction } from "express";
 import { successResponse } from "../models/responseModel";
 
 
-
-
 export const createLoanRequest = async (req: Request, res: Response,next:NextFunction): Promise<void> => {
     try {
         console.log("create loan request received");
