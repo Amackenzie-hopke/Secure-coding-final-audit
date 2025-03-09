@@ -20,13 +20,14 @@ const authenticate = async (
     res:Response,
     next:NextFunction
 ): Promise<void> => {
+try {
     const token: string |undefined = req.headers.authorization?.split(".")[1];
 
     if (!token){
-        throw new AuthenticationError(
+        return next(new AuthenticationError(
             "Unauthorized: No token provided",
             "TOKEN_NOT_FOUND"
-        );
+        ));
     }
 
     try { 
@@ -36,17 +37,23 @@ const authenticate = async (
         next();
     }catch (error:unknown){
         if (error instanceof Error) {
-            throw new AuthenticationError(
+            return next(new AuthenticationError(
                 `Unauthorized: ${getErrorMessage(error)}`,
                 getErrorCode(error)
-            );
+            ));
         } else {
-            throw new AuthenticationError(
+            return next(new AuthenticationError(
                 "Unauthorized: Invalid token",
                 "TOKEN_INVALID"
-            );
+            ));
         }
     }
+} catch (error: unknown) {
+    return next(new AuthenticationError(
+        "Unauthorized: Invalid request",
+        "REQUEST_INVALID"
+    ));
+}
 };
 
 export default authenticate;
