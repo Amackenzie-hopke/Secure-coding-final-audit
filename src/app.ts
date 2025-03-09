@@ -9,6 +9,9 @@ import setupSwagger from "../config/swagger";
 //importing branch and employee routes
 import loanRoute from "./api/v1/routes/loanRoutes"
 
+import adminRoute from "./api/v1/routes/adminRoutes"; 
+import userRoute from "./api/v1/routes/userRoutes";   
+
 
 //importing error handler from middleware directory
 import errorHandler from "./api/v1/middleware/errorHandler";
@@ -36,6 +39,10 @@ app.get("/api/v1/health", (req, res) => {
 		version: "1.0.0",
 	});
 });
+
+
+app.use("/api/v1/admin", adminRoute);
+app.use("/api/v1/users", userRoute);
 
 //using employee and branch routes 
 app.use("/api/v1/loans",loanRoute)
