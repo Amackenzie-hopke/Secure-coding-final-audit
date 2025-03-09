@@ -7,11 +7,16 @@
 
 /api/v1/loans/:id/approve PUT -> Manager
 */
-import { Router } from "express";
+import express,{ Router } from "express";
 
 import {createLoanRequest,updateLoanReview,getAllLoans,approveUpdateLoan } from "../controllers/loanControllers";
 
-const router = Router();
+import authenticate from "../middleware/authenticate";
+import isAuthorized from "../middleware/authorize";
+import { auth } from "config/firebaseConfig";
+
+
+const router: Router = express.Router();
 
 
 /**
@@ -29,7 +34,7 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post("/", createLoanRequest);
+router.post("/",authenticate, createLoanRequest);
 
 /**
  * @swagger
@@ -53,7 +58,12 @@ router.post("/", createLoanRequest);
  *       500:
  *         description: Internal server error
  */
-router.put("/:id/review", updateLoanReview);
+router.put(
+    "/:id/review",
+    authenticate,
+    isAuthorized({ hasRole:["officer"]}),
+    updateLoanReview
+);
 
 /**
  * @swagger
@@ -70,7 +80,12 @@ router.put("/:id/review", updateLoanReview);
  *       500:
  *         description: Internal server error
  */
-router.get("/", getAllLoans);
+router.get(
+    "/",
+    authenticate,
+    isAuthorized({ hasRole:["manager","officer"],allowSameUser: true}),
+    getAllLoans
+);
 
 
 /**
@@ -97,6 +112,11 @@ router.get("/", getAllLoans);
  *       500:
  *         description: Internal server error
  */
-router.put("/:id/approve", approveUpdateLoan);
+router.put(
+    "/:id/approve",
+    authenticate,
+    isAuthorized({hasRole: ["manager"],allowSameUser: true }) ,
+    approveUpdateLoan
+);
 
 export default router;
