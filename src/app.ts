@@ -41,13 +41,12 @@ app.get("/api/v1/health", (req, res) => {
 });
 
 
-app.use("/api/v1/admin", adminRoute);
+
+
+
+app.use("/api/v1/loans",loanRoute);
 app.use("/api/v1/users", userRoute);
-
-//using employee and branch routes 
-app.use("/api/v1/loans",loanRoute)
-
-
+app.use("/api/v1/admin", adminRoute);
 //uses the imported error handdler last
 app.use(errorHandler);
 

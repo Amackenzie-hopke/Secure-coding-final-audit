@@ -13,9 +13,13 @@ import { AuthorizationError } from "../errors/errors";
  */
 function isAuthorized(opts: AuthorizationOptions): MiddlewareFunction {
     return (req: Request, res: Response, next: NextFunction) => {
+        
+        
         const { role, uid } = res.locals;
         const { id } = req.params;
 
+
+        
         // Allow if the same user is accessing their own data
         if (opts.allowSameUser && id && uid === id) {
             return next();

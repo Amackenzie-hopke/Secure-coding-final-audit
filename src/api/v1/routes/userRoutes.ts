@@ -12,4 +12,7 @@ router.get(
     getUserDetails
 );
 
+
+
+
 export default router;
