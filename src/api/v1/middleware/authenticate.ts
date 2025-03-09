@@ -32,11 +32,10 @@ try {
 
     try { 
         const decodedToken: DecodedIdToken = await auth.verifyIdToken(token);
-      
-        const user = await auth.getUser(decodedToken.uid);
+
 
         res.locals.uid = decodedToken.uid;
-        res.locals.role=user.customClaims?.role;
+        res.locals.role=decodedToken.role;
         next();
     }catch (error:unknown){
         if (error instanceof Error) {

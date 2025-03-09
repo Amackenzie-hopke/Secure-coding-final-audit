@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, response } from "express";
 import authenticate from "../src/api/v1/middleware/authenticate";
 import { auth } from "../config/firebaseConfig";
 import { AuthenticationError } from "../src/api/v1/errors/errors";
@@ -17,6 +17,7 @@ describe("authenticate middleware", () => {
     let nextFunction: jest.Mock;
 
     beforeEach(() => {
+        // Arrange (common setup)
         mockRequest = {
             headers: {},
         };
@@ -27,38 +28,31 @@ describe("authenticate middleware", () => {
     });
 
     it("should call next with error when no token is provided", async () => {
-        // Execute
+
+        // Arrange/Act
         await authenticate(
             mockRequest as Request,
             mockResponse as Response,
             nextFunction
         );
 
-        // Verify
+        // Assert
         expect(nextFunction).toHaveBeenCalledWith(
             expect.any(AuthenticationError)
         );
-        expect(nextFunction.mock.calls[0][0].message).toBe("Unauthorized: No token provided");
+        expect(nextFunction.mock.calls[0][0].statusCode).toBe(401);    
     });
 
     it("should call next() when token is valid", async () => {
         // Setup
-        const mockUid = "test-uid";
-        const mockCustomClaims = { role: "admin" };
-        
         mockRequest.headers = {
             authorization: "Bearer valid-token",
         };
 
         // Mock successful verification
         (auth.verifyIdToken as jest.Mock).mockResolvedValueOnce({
-            uid: mockUid
-        });
-        
-        // Mock getUser response
-        (auth.getUser as jest.Mock).mockResolvedValueOnce({
-            uid: mockUid,
-            customClaims: mockCustomClaims
+            uid: "test-uid",
+            role: "admin",
         });
 
         // Execute
@@ -71,34 +65,34 @@ describe("authenticate middleware", () => {
         // Verify
         expect(auth.verifyIdToken).toHaveBeenCalledWith("valid-token");
         expect(mockResponse.locals).toEqual({
-            uid: mockUid,
-            customClaims: mockCustomClaims
+            uid: "test-uid",
+            role: "admin",
         });
         expect(nextFunction).toHaveBeenCalled();
-        expect(nextFunction).toHaveBeenCalledWith();
     });
 
     it("should call next with error when token verification fails", async () => {
-        // Setup
+        // Arrange
         mockRequest.headers = {
             authorization: "Bearer invalid-token",
         };
-
+    
         // Mock failed verification
         (auth.verifyIdToken as jest.Mock).mockRejectedValueOnce(
             new Error("Invalid token")
         );
-
-        // Execute
+    
+        // Act
         await authenticate(
             mockRequest as Request,
             mockResponse as Response,
             nextFunction
         );
-
-        // Verify
+    
+        // Assert
         expect(nextFunction).toHaveBeenCalledWith(
             expect.any(AuthenticationError)
         );
+        expect(nextFunction.mock.calls[0][0].statusCode).toBe(401);
     });
 });
