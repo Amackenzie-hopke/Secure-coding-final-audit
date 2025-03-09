@@ -7,3 +7,5 @@ dist/
 package-lock.json
 
 firebase-key.json
+
+tests/rest-testing.http
