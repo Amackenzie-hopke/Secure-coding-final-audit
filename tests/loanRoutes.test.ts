@@ -8,7 +8,7 @@ import {
     approveUpdateLoan,
 } from "../src/api/v1/controllers/loanControllers";
 
-jest.mock("../src/api/v1/controllers/itemController", () => ({
+jest.mock("../src/api/v1/controllers/loanControllers", () => ({
     createLoanRequest: jest.fn((req, res) => res.status(200).send()),
     updateLoanReview: jest.fn((req, res) => res.status(201).send()),
     getAllLoans: jest.fn((req, res) => res.status(200).send()),
@@ -25,58 +25,56 @@ jest.mock("../src/api/v1/middleware/authorize", () => {
     );
 });
 
-describe("Item Routes", () => {
+describe("loan Routes", () => {
     afterEach(() => {
         jest.clearAllMocks();
     });
 
-    describe("GET /api/v1/items", () => {
-        it("should call getAllItems controller", async () => {
+    describe("POST /api/v1/loans", () => {
+        it("should call createloanRequest controller", async () => {
             await request(app)
-                .get("/api/v1/items")
+                .post("/api/v1/loans")
                 .set("Authorization", "Bearer mockedToken");
-            expect(getAllItems).toHaveBeenCalled();
+            expect(createLoanRequest).toHaveBeenCalled();
         });
     });
 
-    describe("POST /api/v1/items", () => {
-        it("should call createItem controller", async () => {
+    describe("PUT /api/v1/loans/:id/review", () => {
+        it("should call update review controller", async () => {
+            const mockItem = {
+                name: "Test loan",
+                description: "Test Description",
+            };
+
+            await request(app)
+                .put("/api/v1/loans/122/review")
+                .set("Authorization", "Bearer mockedToken")
+                .send(mockItem);
+            expect(updateLoanReview).toHaveBeenCalled();
+        });
+    });
+
+    describe("GET /api/v1/loans", () => {
+        it("should call getAllLoans controller", async () => {
             const mockItem = {
                 name: "Test Item",
                 description: "Test Description",
             };
 
+
             await request(app)
-                .post("/api/v1/items")
+                .get(`/api/v1/loans`)
                 .set("Authorization", "Bearer mockedToken")
-                .send(mockItem);
-            expect(createItem).toHaveBeenCalled();
+            expect(getAllLoans).toHaveBeenCalled();
         });
     });
 
-    describe("PUT /api/v1/items/:id", () => {
-        it("should call updateItem controller", async () => {
-            const mockItem = {
-                name: "Test Item",
-                description: "Test Description",
-            };
-
-            const mockId = 1;
-
+    describe("PUT /api/v1/loans/:id/approve", () => {
+        it("should call approveUpdateLoan controller", async () => {
             await request(app)
-                .put(`/api/v1/items/${mockId}`)
-                .set("Authorization", "Bearer mockedToken")
-                .send(mockItem);
-            expect(updateItem).toHaveBeenCalled();
-        });
-    });
-
-    describe("DELETE /api/v1/items/:id", () => {
-        it("should call deleteItem controller", async () => {
-            await request(app)
-                .delete("/api/v1/items/1")
+                .put("/api/v1/loans/1/approve")
                 .set("Authorization", "Bearer mockedToken");
-            expect(deleteItem).toHaveBeenCalled();
+            expect(approveUpdateLoan).toHaveBeenCalled();
         });
     });
 });
