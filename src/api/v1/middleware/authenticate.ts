@@ -32,8 +32,6 @@ try {
 
     try { 
         const decodedToken: DecodedIdToken = await auth.verifyIdToken(token);
-
-
         res.locals.uid = decodedToken.uid;
         res.locals.role=decodedToken.role;
         next();
