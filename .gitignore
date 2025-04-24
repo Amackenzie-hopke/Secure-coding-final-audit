@@ -1,0 +1,11 @@
+node_modules/
+
+dist/
+
+.vscode/
+
+package-lock.json
+
+firebase-key.json
+
+tests/rest-testing.http
